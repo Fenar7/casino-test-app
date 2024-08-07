@@ -8,7 +8,7 @@ function UserHeader() {
 
   const fetchServerTime = async () => {
     try {
-        const response = await fetch('/api/getTime',{
+        const response = await fetch('/api/getTime', {
             method: 'POST',
         });
         if (response.ok) {
@@ -24,12 +24,13 @@ function UserHeader() {
 
   useEffect(() => {
     // Function to get the current local date and time
-    const updateDateTime = async() => {
+    const updateDateTime = async () => {
       const date = await fetchServerTime();
       const formattedDate = date.toLocaleDateString(); // Format the date
       const formattedTime = date.toLocaleTimeString('en-US', {
         hour: '2-digit',
         minute: '2-digit',
+        second: '2-digit', // Include seconds
         hour12: true
       });
       setDateTime({ date: formattedDate, time: formattedTime });
