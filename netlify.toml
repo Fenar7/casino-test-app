@@ -1,0 +1,8 @@
+[build]
+  functions = "./app/api"  # Path to your serverless functions directory
+
+[[redirects]]
+  from = "/api/*"
+  to = "/api/:splat"
+  status = 200
+  force = true

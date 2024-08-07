@@ -1,0 +1,29 @@
+.user-header {
+  position: absolute;
+  top: 0%;
+  background-color: white;
+  width: 100vw;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1em 1em;
+}
+.user-header .time {
+  font-size: 2rem;
+  font-weight: 600;
+}
+@media (max-width: 768px) {
+  .user-header .time {
+    font-size: 1.3rem;
+  }
+}
+.user-header .date {
+  font-size: 2rem;
+  font-weight: 600;
+}
+@media (max-width: 768px) {
+  .user-header .date {
+    font-size: 1.3rem;
+  }
+}/*# sourceMappingURL=userheader.css.map */

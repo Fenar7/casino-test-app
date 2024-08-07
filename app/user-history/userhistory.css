@@ -1,0 +1,145 @@
+.user-history-container .heading {
+  margin-top: 2rem;
+}
+.user-history-container .heading h1 {
+  color: #000;
+  text-align: center;
+  font-family: inherit;
+  font-size: 3.125rem;
+  font-style: normal;
+  font-weight: 800;
+  line-height: normal;
+}
+@media (max-width: 768px) {
+  .user-history-container .heading h1 {
+    font-size: 2.5rem;
+  }
+}
+.user-history-container .heading .sidebar {
+  gap: 1em;
+  row-gap: 1em;
+}
+.user-history-container .heading .sidebar .home-btn {
+  display: flex;
+  padding: 1rem 1.625rem;
+  justify-content: center;
+  align-items: center;
+  gap: 0.625rem;
+  border-radius: 0.4375rem;
+  background: #fff;
+  border: none;
+  color: #000 !important;
+  border: 1px solid black;
+  font-family: inherit;
+  font-size: 1.125rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  transition: all 0.3s ease-in-out;
+  text-decoration: none;
+}
+@media (max-width: 900px) {
+  .user-history-container .heading .sidebar .home-btn {
+    font-size: 1rem;
+    padding: 0.8rem 1.425rem;
+  }
+}
+@media (max-width: 768px) {
+  .user-history-container .heading .sidebar .home-btn {
+    font-size: 0.9rem;
+    padding: 0.8rem 1.325rem;
+  }
+}
+.user-history-container .heading .sidebar .home-btn:hover {
+  color: #fff;
+  background-color: #000;
+}
+@media (max-width: 768px) {
+  .user-history-container .heading {
+    flex-direction: column;
+    justify-content: center;
+  }
+}
+.user-history-container .user-history-list {
+  margin-top: 1em;
+  gap: 1em;
+  row-gap: 1em;
+}
+.user-history-container .user-history-list .history-item {
+  border: 1px solid black;
+  padding: 1em 1.3em;
+  border-radius: 1rem;
+}
+.user-history-container .user-history-list .history-item h2 {
+  font-family: inherit;
+  font-size: 1.7rem;
+  font-weight: 800;
+  margin-bottom: 0.5em;
+}
+@media (max-width: 768px) {
+  .user-history-container .user-history-list .history-item h2 {
+    font-size: 1.4rem;
+  }
+}
+.user-history-container .user-history-list .history-item p {
+  font-size: 1.1rem;
+  font-family: inherit;
+  font-weight: 700;
+}
+@media (max-width: 768px) {
+  .user-history-container .user-history-list .history-item p {
+    font-size: 0.95rem;
+  }
+}
+.user-history-container .user-history-list .history-item .time1 {
+  color: red;
+}
+.user-history-container .user-history-list .history-item .time2 {
+  color: blue;
+}
+.user-history-container .user-history-list .history-item .time3 {
+  color: green;
+}
+.user-history-container .user-history-list .history-item .time4 {
+  color: violet;
+}
+.user-history-container .user-history-table {
+  margin-top: 1em;
+}
+.user-history-container .user-history-table table thead .time1 {
+  color: red;
+}
+.user-history-container .user-history-table table thead .time2 {
+  color: blue;
+}
+.user-history-container .user-history-table table thead .time3 {
+  color: green;
+}
+.user-history-container .user-history-table table thead .time4 {
+  color: rgb(138, 28, 138);
+}
+.user-history-container .user-history-table table tbody tr .date {
+  background-color: black;
+  font-weight: 800;
+  color: white;
+}
+.user-history-container .user-history-table table tbody tr .time1 {
+  background-color: rgb(255, 0, 0) !important;
+  font-weight: 800;
+  color: white;
+}
+.user-history-container .user-history-table table tbody tr .time2 {
+  background-color: blue;
+  font-weight: 800;
+  color: white;
+}
+.user-history-container .user-history-table table tbody tr .time3 {
+  background-color: green;
+  font-weight: 800;
+  color: white;
+}
+.user-history-container .user-history-table table tbody tr .time4 {
+  background-color: rgb(138, 28, 138);
+  font-weight: 800;
+  color: white;
+}/*# sourceMappingURL=userhistory.css.map */
