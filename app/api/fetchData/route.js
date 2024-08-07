@@ -6,22 +6,12 @@ export default async function handler(req, res) {
     try {
         await connectToDB();
 
-        // Log the current time on the server
-        console.log('Server Time:', new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
+        // Log the current server time in Asia/Kolkata timezone
+        const serverDate = new Date();
+        const options = { timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit' };
+        const localDate = serverDate.toLocaleDateString('en-CA', options); // Format as 'YYYY-MM-DD'
 
-        // Fetch the current date and time from World Time API for Asia/Kolkata
-        const response = await fetch('https://worldtimeapi.org/api/timezone/Asia/Kolkata', {
-            headers: { 'Cache-Control': 'no-cache' }
-        });
-
-        if (!response.ok) {
-            throw new Error('Failed to fetch time from World Time API');
-        }
-
-        const timeData = await response.json();
-        console.log('Full Time Data:', timeData);
-
-        const localDate = timeData.datetime.split('T')[0]; // Extract the date in 'YYYY-MM-DD' format
+        console.log('Server Time (Asia/Kolkata):', serverDate.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
         console.log('Parsed Date:', localDate);
 
         // Find the document with the current date
@@ -40,7 +30,7 @@ export default async function handler(req, res) {
 
     } catch (error) {
         console.log('Error:', error.message);
-        return new Response("Failed to fetch Data", { status: 500 });
+        return new Response("Failed to fetch data", { status: 500 });
     }
 }
 

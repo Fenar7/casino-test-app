@@ -11,6 +11,22 @@ const AnimatedText = () => {
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d');
 
+        const fetchServerTime = async () => {
+            try {
+                const response = await fetch('/api/getTime',{
+                    method: 'POST',
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    return new Date(data.serverTime);
+                }
+                throw new Error('Failed to fetch server time');
+            } catch (error) {
+                console.error(error);
+                // return new Date(); // Fallback to client time
+            }
+        };
+
         const resizeCanvas = () => {
             const scaleFactor = 2; // Increase resolution
             canvas.width = canvas.clientWidth * scaleFactor;
@@ -158,43 +174,34 @@ const AnimatedText = () => {
             }
         };
 
-        const checkTimeAndDisplay = async () => {
-            try {
-                const response = await fetch('https://worldtimeapi.org/api/timezone/Asia/Kolkata');
-                if (!response.ok) {
-                    throw new Error('Failed to fetch time from World Time API');
-                }
-                const timeData = await response.json();
-                const currentDateTime = new Date(timeData.datetime);
-                const hours = currentDateTime.getHours();
-                const minutes = currentDateTime.getMinutes();
-                const isExactHour = minutes === 0;
+        const checkTimeAndDisplay = async() => {
+            const currentDateTime = await fetchServerTime();
+            const hours = currentDateTime.getHours();
+            const minutes = currentDateTime.getMinutes();
+            const isExactHour = minutes === 0;
 
-                console.log('World Time API DateTime:', currentDateTime);
+            console.log('Local DateTime:', currentDateTime);
 
-                if (hours === 12 && isExactHour && !animationStarted) {
-                    await startAnimationWithAPI('/api/getNum1');
-                } else if (hours === 14 && isExactHour && !animationStarted) {
-                    await startAnimationWithAPI('/api/getNum2');
-                } else if (hours === 17 && isExactHour && !animationStarted) {
-                    await startAnimationWithAPI('/api/getNum3');
-                } else if (hours === 19 && isExactHour && !animationStarted) {
-                    await startAnimationWithAPI('/api/getNum4');
+            if (hours === 12 && isExactHour && !animationStarted) {
+                startAnimationWithAPI('/api/getNum1');
+            } else if (hours === 14 && isExactHour && !animationStarted) {
+                startAnimationWithAPI('/api/getNum2');
+            } else if (hours === 17 && isExactHour && !animationStarted) {
+                startAnimationWithAPI('/api/getNum3');
+            } else if (hours === 19 && isExactHour && !animationStarted) {
+                startAnimationWithAPI('/api/getNum4');
+            } else {
+                if (hours >= 12 && hours < 14) {
+                    displayStaticNumber('/api/getNum1', 'Static 1');
+                } else if (hours >= 14 && hours < 17) {
+                    displayStaticNumber('/api/getNum2', 'Static 2');
+                } else if (hours >= 17 && hours < 19) {
+                    displayStaticNumber('/api/getNum3', 'Static 3');
+                } else if (hours >= 19 && hours < 24) {
+                    displayStaticNumber('/api/getNum4', 'Static 4');
                 } else {
-                    if (hours >= 12 && hours < 14) {
-                        displayStaticNumber('/api/getNum1', 'Static 1');
-                    } else if (hours >= 14 && hours < 17) {
-                        displayStaticNumber('/api/getNum2', 'Static 2');
-                    } else if (hours >= 17 && hours < 19) {
-                        displayStaticNumber('/api/getNum3', 'Static 3');
-                    } else if (hours >= 19 && hours < 24) {
-                        displayStaticNumber('/api/getNum4', 'Static 4');
-                    } else {
-                        drawRedBarAndText('0000');
-                    }
+                    drawRedBarAndText('0000');
                 }
-            } catch (error) {
-                console.error('Error fetching time from World Time API:', error);
             }
         };
 

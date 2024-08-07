@@ -6,22 +6,12 @@ export default async function handler(req, res) {
     try {
         await connectToDB();
 
-        // Fetch the current date and time from World Time API for Asia/Kolkata
-        const timeResponse = await fetch('https://worldtimeapi.org/api/timezone/Asia/Kolkata', {
-            headers: { 'Cache-Control': 'no-cache' }
-        });
-
-        if (!timeResponse.ok) {
-            throw new Error('Failed to fetch time from World Time API');
-        }
-
-        const timeData = await timeResponse.json();
-        console.log('Time Data from API:', JSON.stringify(timeData));
+        // Get the current date and time from the server in Asia/Kolkata timezone
+        const serverDate = new Date();
+        const options = { timeZone: 'Asia/Kolkata', hour12: false };
         
-        // Use the datetime field directly
-        const datetimeString = timeData.datetime; // e.g., "2024-08-03T15:03:48.812718+05:30"
-        const currentDate = datetimeString.split('T')[0]; // Format: YYYY-MM-DD
-        const currentHour = parseInt(datetimeString.split('T')[1].split(':')[0]); // Extract hour
+        const currentDate = serverDate.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' }); // Format: YYYY-MM-DD
+        const currentHour = parseInt(serverDate.toLocaleTimeString('en-GB', options).split(':')[0]); // Extract hour in 24-hour format
 
         console.log(`Current date (IST): ${currentDate}`);
         console.log(`Current hour (IST): ${currentHour}`);
@@ -49,12 +39,12 @@ export default async function handler(req, res) {
                         time3number: null,
                         time4number: null,
                     };
-                }else if(currentHour >= 14 && currentHour < 17){
-                    return{
+                } else if (currentHour >= 14 && currentHour < 17) {
+                    return {
                         ...item.toObject(),
                         time3number: null,
                         time4number: null,
-                    }
+                    };
                 } else if (currentHour >= 17 && currentHour < 19) {
                     return {
                         ...item.toObject(),

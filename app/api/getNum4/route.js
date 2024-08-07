@@ -6,17 +6,12 @@ export default async function handler(req, res) {
     try {
         await connectToDB();
 
-        // Fetch the current date and time from World Time API for Asia/Kolkata
-        const response = await fetch('https://worldtimeapi.org/api/timezone/Asia/Kolkata', {
-            headers: { 'Cache-Control': 'no-cache' }
-        });
-        if (!response.ok) {
-            throw new Error('Failed to fetch time from World Time API');
-        }
-        const timeData = await response.json();
-        const localDate = timeData.datetime.split('T')[0]; // Extract the date in 'YYYY-MM-DD' format
 
-        console.log('Current date (World Time API):', localDate);
+        // Fetch the current local date and time
+        const now = new Date();
+        const localDate = now.toISOString().split('T')[0]; // Extract the date in 'YYYY-MM-DD' format
+
+        console.log('Current date (Local time):', localDate);
 
         // Find the document with the current date
         let data = await Data.findOne({ date: localDate });

@@ -29,17 +29,13 @@ export default async function handler(req, res) {
 
         await connectToDB();
 
-        // Fetching the current date and time from World Time API for Asia/Kolkata
-        const response = await fetch('https://worldtimeapi.org/api/timezone/Asia/Kolkata', {
-            headers: { 'Cache-Control': 'no-cache' }
-        });
-        if (!response.ok) {
-            throw new Error('Failed to fetch time from World Time API');
-        }
-        const timeData = await response.json();
-        const localDate = timeData.datetime.split('T')[0]; // Extract the date in 'YYYY-MM-DD' format
+        // Get the current date and time from the server in Asia/Kolkata timezone
+        const serverDate = new Date();
+        const options = { timeZone: 'Asia/Kolkata', hour12: false };
+        
+        const localDate = serverDate.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' }); // Format: YYYY-MM-DD
 
-        console.log('current date (World Time API):', localDate);
+        console.log('Current date (Local Server Time):', localDate);
 
         const updateData = {
             time1number: time1numberNumber,
@@ -61,10 +57,7 @@ export default async function handler(req, res) {
         } else {
             const data = new Data({
                 date: localDate, // Save the current date
-                time1number: time1numberNumber,
-                time2number: time2numberNumber,
-                time3number: time3numberNumber,
-                time4number: time4numberNumber,
+                ...updateData,
             });
             await data.save();
 
