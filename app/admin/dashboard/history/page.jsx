@@ -66,7 +66,7 @@ function HistoryPage() {
                                 <div key={index} className="history-item">
                                     <h2>Date: {formattedDate}</h2>
                                     <p className="time1">12 PM: {formatNumber(item.time1number)}</p>
-                                    <p className="time2">2 PM: {formatNumber(item.time2number)}</p>
+                                    <p className="time2">3 PM: {formatNumber(item.time2number)}</p>
                                     <p className="time3">5 PM: {formatNumber(item.time3number)}</p>
                                     <p className="time4">7 PM: {formatNumber(item.time4number)}</p>
                                 </div>

@@ -27,115 +27,104 @@ const AnimatedText = () => {
             }
         };
 
-        const resizeCanvas = () => {
-            const scaleFactor = 2; // Increase resolution
+        const resizeCanvas = (scaleFactor = 2) => {
             canvas.width = canvas.clientWidth * scaleFactor;
             canvas.height = canvas.clientHeight * scaleFactor;
             ctx.scale(scaleFactor, scaleFactor); // Scale down the canvas display size
         };
 
         const drawRedBarAndText = (text) => {
-            resizeCanvas(); // Ensure the canvas is correctly sized
+            resizeCanvas(2); // Ensure the canvas is correctly sized
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#622'; // Red color for the bar
-
+            ctx.fillStyle = '#000'; // Red color for the bar
+        
             // Adjust the bar's height proportionally to the canvas height
-            const barHeight = Math.min(50, canvas.height * 0.1);
+            const barHeight = Math.min(100, canvas.height * 0.1);
             ctx.fillRect(0, (canvas.height / 2 / 2 - barHeight / 2), canvas.width / 2, barHeight);
-
-            ctx.fillStyle = '#ccc'; // Color for the number or message
+        
+            ctx.fillStyle = '#fff'; // Color for the number or message
             ctx.textBaseline = 'middle';
             ctx.textAlign = 'center';
-
+        
             // Adjust the font size proportionally to the canvas size
             const fontSize = Math.min(50, canvas.height * 0.1 / 2);
-            ctx.font = `${fontSize}px Helvetica`;
-
-            // Calculate the width of a single character and the width of the central number
+            ctx.font = `80px Helvetica`;
+        
+            // Calculate the width of a single character
             const charWidth = ctx.measureText('0').width;
-            const mainNumberWidth = ctx.measureText(text).width;
-
-            // Calculate the spacing between columns
-            const columnSpacing = charWidth * 0.08; // Adjust as needed for alignment
-            const totalWidth = 3 * charWidth + 3 * columnSpacing;
-            const startX = (canvas.width / 2 - totalWidth) / 2;
-
-            // Draw the main static number in the center
-            ctx.fillText(text, canvas.width / 2 / 2, canvas.height / 2 / 2);
-
-            // Draw random numbers in columns around the center number
-            const chars = '1234567890'.split('');
-            const randomOffset = Math.ceil(canvas.height / 2 / fontSize / 2);
-
-            for (let i = -randomOffset; i <= randomOffset; i++) {
-                if (i === 0) continue; // Skip the center number
-
-                // Generate random numbers for each column
-                const randomChars = Array.from({ length: 4 }, () => chars[Math.floor(Math.random() * chars.length)]);
-
-                ctx.globalAlpha = 1 - Math.abs(i) / (randomOffset + 1); // Gradual fade-out effect
-
-                // Draw each column of random numbers
-                for (let j = 0; j < 4; j++) {
-                    ctx.fillText(randomChars[j], startX + j * (charWidth + columnSpacing), canvas.height / 2 / 2 + i * fontSize);
-                }
+        
+            // Set column spacing, adjust this value to change spacing between characters
+            const columnSpacing = charWidth * 0.2; // Adjust this value for spacing between characters
+        
+            // Draw each character separately with the specified spacing
+            let xPosition = (canvas.width / 2 / 2) - ((charWidth + columnSpacing) * (text.length - 1)) / 2;
+        
+            for (let i = 0; i < text.length; i++) {
+                ctx.fillText(text[i], xPosition, canvas.height / 2 / 2);
+                xPosition += charWidth + columnSpacing; // Move to the next character's position
             }
         };
+        
 
         const startAnimation = (text) => {
             const chars = '1234567890'.split('');
-            const scale = 100;
+            const scale = 100; // Base scale for the characters
             const breaks = 0.003;
             const endSpeed = 0.05;
             const firstLetter = 220;
             const delay = 40;
-
+            
+            const spacingMultiplier = 0.6; // Adjust this value to increase or decrease spacing between characters
+        
             text = text.split('');
             const charMap = [];
             const offset = [];
             const offsetV = [];
-
+        
             for (let i = 0; i < chars.length; i++) {
                 charMap[chars[i]] = i;
             }
-
+        
             for (let i = 0; i < text.length; i++) {
                 const f = firstLetter + delay * i;
                 offsetV[i] = endSpeed + breaks * f;
                 offset[i] = -(1 + f) * (breaks * f + 2 * endSpeed) / 2;
             }
-
-            resizeCanvas();
-
+        
+            resizeCanvas(1);
+        
             const loop = () => {
                 ctx.setTransform(1, 0, 0, 1, 0, 0);
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 ctx.globalAlpha = 1;
-                ctx.fillStyle = '#622';
+                ctx.fillStyle = '#000';
                 ctx.fillRect(0, (canvas.height - scale) / 2, canvas.width, scale);
-
+        
                 for (let i = 0; i < text.length; i++) {
-                    ctx.fillStyle = '#ccc';
+                    ctx.fillStyle = '#fff';
                     ctx.textBaseline = 'middle';
                     ctx.textAlign = 'center';
-                    ctx.setTransform(1, 0, 0, 1, Math.floor((canvas.width - scale * (text.length - 1)) / 2), Math.floor(canvas.height / 2));
-
+                    
+                    // Adjust character position by multiplying scale with spacingMultiplier
+                    const xPosition = Math.floor((canvas.width - (scale * spacingMultiplier) * (text.length - 1)) / 2) + (scale * spacingMultiplier) * i;
+                    ctx.setTransform(1, 0, 0, 1, xPosition, Math.floor(canvas.height / 2));
+        
                     let o = offset[i];
                     while (o < 0) o++;
                     o %= 1;
-
+        
                     const h = Math.ceil(canvas.height / 2 / scale);
                     for (let j = -h; j < h; j++) {
                         let c = charMap[text[i]] + j - Math.floor(offset[i]);
                         while (c < 0) c += chars.length;
                         c %= chars.length;
-
+        
                         const s = 1 - Math.abs(j + o) / (canvas.height / 2 / scale + 1);
                         ctx.globalAlpha = s;
-                        ctx.font = `${scale * s}px Helvetica`;
-                        ctx.fillText(chars[c], scale * i, (j + o) * scale);
+                        ctx.font = `${(scale * s)-10}px Helvetica`;
+                        ctx.fillText(chars[c], 0, (j + o) * scale); // x-position handled by setTransform
                     }
-
+        
                     offset[i] += offsetV[i];
                     offsetV[i] -= breaks;
                     if (offsetV[i] < endSpeed) {
@@ -143,12 +132,13 @@ const AnimatedText = () => {
                         offsetV[i] = 0;
                     }
                 }
-
+        
                 requestAnimationFrame(loop);
             };
-
+        
             requestAnimationFrame(loop);
         };
+        
 
         const displayStaticNumber = async (url, fallbackText) => {
             try {
@@ -184,16 +174,16 @@ const AnimatedText = () => {
 
             if (hours === 12 && isExactHour && !animationStarted) {
                 startAnimationWithAPI('/api/getNum1');
-            } else if (hours === 14 && isExactHour && !animationStarted) {
+            } else if (hours === 15 && isExactHour && !animationStarted) {
                 startAnimationWithAPI('/api/getNum2');
-            } else if (hours === 17 && isExactHour && !animationStarted) {
+            } else if (hours === 17  && isExactHour && !animationStarted) {
                 startAnimationWithAPI('/api/getNum3');
-            } else if (hours === 19 && isExactHour && !animationStarted) {
+            } else if (hours === 19 && isExactHour   && !animationStarted) {
                 startAnimationWithAPI('/api/getNum4');
             } else {
-                if (hours >= 12 && hours < 14) {
+                if (hours >= 12 && hours < 15) {
                     displayStaticNumber('/api/getNum1', 'Static 1');
-                } else if (hours >= 14 && hours < 17) {
+                } else if (hours >= 15 && hours < 17) {
                     displayStaticNumber('/api/getNum2', 'Static 2');
                 } else if (hours >= 17 && hours < 19) {
                     displayStaticNumber('/api/getNum3', 'Static 3');

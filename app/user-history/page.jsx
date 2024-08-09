@@ -67,7 +67,7 @@ export default function UserHistory() {
                                 <tr>
                                     <th>Date</th>
                                     <th className="time1">12 PM</th>
-                                    <th className="time2">2 PM</th>
+                                    <th className="time2">3 PM</th>
                                     <th className="time3">5 PM</th>
                                     <th className="time4">7 PM</th>
                                 </tr>

@@ -32,14 +32,14 @@ export default async function handler(req, res) {
                         time3number: null,
                         time4number: null,
                     };
-                } else if (currentHour >= 12 && currentHour < 14) {
+                } else if (currentHour >= 12 && currentHour < 15) {
                     return {
                         ...item.toObject(),
                         time2number: null,
                         time3number: null,
                         time4number: null,
                     };
-                } else if (currentHour >= 14 && currentHour < 17) {
+                } else if (currentHour >= 15 && currentHour < 17) {
                     return {
                         ...item.toObject(),
                         time3number: null,
