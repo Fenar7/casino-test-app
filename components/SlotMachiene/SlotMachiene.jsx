@@ -69,42 +69,50 @@ const AnimatedText = () => {
         const startAnimation = (text) => {
             const chars = '1234567890'.split('');
             const scale = 100; // Base scale for the characters
+            const rectangleHeight = 180; // Adjust this value to change the height of the rectangle
             const breaks = 0.003;
             const endSpeed = 0.05;
             const firstLetter = 220;
             const delay = 40;
-            
-            const spacingMultiplier = 0.6; // Adjust this value to increase or decrease spacing between characters
+        
+            const spacingMultiplier = 1.1; // Adjust this value to increase or decrease spacing between characters
+            const verticalSpacingMultiplier = 1.7; // Adjust this value to increase or decrease vertical spacing
         
             text = text.split('');
             const charMap = [];
             const offset = [];
             const offsetV = [];
         
+            // Map each character to its index in the chars array
             for (let i = 0; i < chars.length; i++) {
                 charMap[chars[i]] = i;
             }
         
+            // Initialize offsets and velocities for the animation
             for (let i = 0; i < text.length; i++) {
                 const f = firstLetter + delay * i;
                 offsetV[i] = endSpeed + breaks * f;
                 offset[i] = -(1 + f) * (breaks * f + 2 * endSpeed) / 2;
             }
         
-            resizeCanvas(1);
+            // Resize the canvas to improve resolution
+            resizeCanvas(2);
         
             const loop = () => {
+                // Reset canvas transformations and clear it
                 ctx.setTransform(1, 0, 0, 1, 0, 0);
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 ctx.globalAlpha = 1;
+        
+                // Draw a black rectangle as the background for the animation
                 ctx.fillStyle = '#000';
-                ctx.fillRect(0, (canvas.height - scale) / 2, canvas.width, scale);
+                ctx.fillRect(0, (canvas.height - rectangleHeight) / 2, canvas.width, rectangleHeight);
         
                 for (let i = 0; i < text.length; i++) {
                     ctx.fillStyle = '#fff';
                     ctx.textBaseline = 'middle';
                     ctx.textAlign = 'center';
-                    
+        
                     // Adjust character position by multiplying scale with spacingMultiplier
                     const xPosition = Math.floor((canvas.width - (scale * spacingMultiplier) * (text.length - 1)) / 2) + (scale * spacingMultiplier) * i;
                     ctx.setTransform(1, 0, 0, 1, xPosition, Math.floor(canvas.height / 2));
@@ -121,8 +129,10 @@ const AnimatedText = () => {
         
                         const s = 1 - Math.abs(j + o) / (canvas.height / 2 / scale + 1);
                         ctx.globalAlpha = s;
-                        ctx.font = `${(scale * s)-10}px Helvetica`;
-                        ctx.fillText(chars[c], 0, (j + o) * scale); // x-position handled by setTransform
+                        ctx.font = `${(scale * s) + 60}px Helvetica`;
+        
+                        // Adjust the vertical position by multiplying scale with verticalSpacingMultiplier
+                        ctx.fillText(chars[c], 0, (j + o) * scale * verticalSpacingMultiplier); 
                     }
         
                     offset[i] += offsetV[i];
@@ -138,6 +148,8 @@ const AnimatedText = () => {
         
             requestAnimationFrame(loop);
         };
+        
+        
         
 
         const displayStaticNumber = async (url, fallbackText) => {
@@ -174,9 +186,9 @@ const AnimatedText = () => {
 
             if (hours === 12 && isExactHour && !animationStarted) {
                 startAnimationWithAPI('/api/getNum1');
-            } else if (hours === 15 && isExactHour && !animationStarted) {
+            } else if (hours === 15 && isExactHour  && !animationStarted) {
                 startAnimationWithAPI('/api/getNum2');
-            } else if (hours === 17  && isExactHour && !animationStarted) {
+            } else if (hours === 17 && isExactHour  && isExactHour && !animationStarted) {
                 startAnimationWithAPI('/api/getNum3');
             } else if (hours === 19 && isExactHour   && !animationStarted) {
                 startAnimationWithAPI('/api/getNum4');
